@@ -11,7 +11,6 @@ const REACT_APP_RESPONSE_TYPE = 'token';
 
 let app = express();
 
-
 app.get('/callback', function(req, res) {
     let code = req.query.code || null;
     console.log("🚀 ~ file: server.js ~ line 39 ~ app.get ~ code", code)

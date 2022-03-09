@@ -1,52 +1,43 @@
 import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {getToken} from '../Redux/appSlice'
-import { setThunkPlaylist } from '../Redux/spottifySlice';
+import { setThunkPlaylist, setThunkItems } from '../Redux/spottifySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Tabledata from './TableData.jsx';
+import Buttonsplaylist from './ButtonsPlaylist';
+import { Button } from 'react-bootstrap';
 
 const Layout = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const credentials = useSelector((state) => state.tokenReducer.credentials);
     const items = useSelector((state) => state.spotify.playlist)
-    // const currentToken = '';
-
-    // const {token, getToken} = useContext(UserContext);
-    // const [items, setItems] = useState([]);
+    
     useEffect(()=>{
         dispatch(getToken());
-        if (credentials)
-            dispatch(setThunkPlaylist());
+    },[])
 
-        // if (currentToken){
-        //     console.log("get Token");
-        //     loginSpotify(currentToken);
-            // refreshAccessToken(currentToken);
-            // dispatch(setThunkPlaylist());
-        
-    }, [credentials.access_token])
+    
+    const handleBringItems = (e) =>{
+        e.preventDefault();
+        console.log('am working');
+        dispatch(setThunkItems());
 
-
-    const logout = () => {
-        // setToken("");
-        window.localStorage.removeItem("token");
-        navigate('/login');
-        
     }
 
 
     return (
         <div>
             <h1>Hola desde Layout</h1>
-            <h2 onClick={logout}>
-                Logout
-            </h2>
+            <Buttonsplaylist handleBringItems={handleBringItems}/>
             {items ? <Tabledata items={items}/>
                    : <span>nothing to show</span>}
 
             {/* <h1>{currentToken && <span>{currentToken}</span>}</h1> */}
+            <Button >
+                Save
+            </Button>
+
         </div>
     );
 }

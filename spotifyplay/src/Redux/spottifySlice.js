@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import {getPlaylist, searchItems, getTopArtist} from '../api/spotifyApi'
+import { getTopArtist, getTopSongsbyArtist} from '../api/spotifyApi'
 
 
 export const setThunkPlaylist = createAsyncThunk(
@@ -8,10 +8,34 @@ export const setThunkPlaylist = createAsyncThunk(
     try {
         const items = await getTopArtist();
         // console.log("🚀 ~ file: spottifySlice.js ~ line 10 ~ items", items)
-        // dispatch(setPlaylist(items));
+        dispatch(setPlaylist(items));
     } catch (error) {
       console.error("Algo malo paso");    
     }
+  }
+)
+
+export const setThunkItems = createAsyncThunk(
+  'spotify/setItems',
+  async (_, {dispatch}) =>{
+    try{
+      const artists = await getTopArtist();
+      const songs = await getTopSongsbyArtist(artists);
+      
+      let result = []
+      
+      for (let i = 0; i < songs.length; i++) 
+        for (let j = 0; j < songs[i].tracks.length; j++) 
+          result.push(songs[i].tracks[j]);  
+      
+      console.log("🚀 ~ file: spottifySlice.js ~ line 29 ~ result", result)
+      dispatch(setPlaylist(result));
+    }catch(e){
+      console.error('no se hizo la peticion')
+    }
+    
+    
+
   }
 )
 
