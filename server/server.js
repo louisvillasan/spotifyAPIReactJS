@@ -1,9 +1,10 @@
 
 const express = require('express');
+require('dotenv').config();
 const request = require('request'); // "Request" library
 // const querystring = require('querystring');
-const REACT_APP_SPOTIFY_CLIENT_ID = '41e4e392450e431d8ab88341ea1340be'
-const REACT_APP_SPOTIFY_CLIENT_SECRET = '8bb4c1cc28ce443eb6fb056bae52eec1'
+const REACT_APP_SPOTIFY_CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID
+const REACT_APP_SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
 const REACT_APP_SPOTIFY_REDIRECT_CALLBACK = 'http://localhost:3000/'
 const REACT_APP_SPOTIFY_URL = 'https://accounts.spotify.com/authorize'
 const REACT_APP_RESPONSE_TYPE = 'token';
