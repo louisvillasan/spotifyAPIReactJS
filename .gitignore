@@ -1,0 +1,6 @@
+server/node_modules
+
+spotifyplay/node_modules
+.env*
+
+
