@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import {getToken} from '../Redux/appSlice'
-import { setThunkPlaylist, setThunkItems } from '../Redux/spottifySlice';
+import {  setThunkItems,
+            createPlaylist } from '../Redux/spottifySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Tabledata from './TableData.jsx';
 import Buttonsplaylist from './ButtonsPlaylist';
@@ -9,32 +10,41 @@ import { Button } from 'react-bootstrap';
 
 const Layout = () => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const dispatch = useDispatch();
-    const items = useSelector((state) => state.spotify.playlist)
+    const {playlist, isLoading} = useSelector((state) => state.spotify)
     
     useEffect(()=>{
         dispatch(getToken());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     
-    const handleBringItems = (e) =>{
-        e.preventDefault();
+    const handleBringItems = type =>{
+    console.log("🚀 ~ file: Layout.jsx ~ line 24 ~ handleBringItems ~ type", type)
+        // e.preventDefault();
         console.log('am working');
-        dispatch(setThunkItems());
+        dispatch(setThunkItems(type));
 
+    }
+
+    const handleCreatePlaylist = (e) =>{
+        e.preventDefault();
+        dispatch(createPlaylist());
     }
 
 
     return (
         <div>
             <h1>Hola desde Layout</h1>
-            <Buttonsplaylist handleBringItems={handleBringItems}/>
-            {items ? <Tabledata items={items}/>
+            <Buttonsplaylist
+                isLoading={isLoading} 
+                handleBringItems={handleBringItems}/>
+            {playlist ? <Tabledata items={playlist}/>
                    : <span>nothing to show</span>}
 
             {/* <h1>{currentToken && <span>{currentToken}</span>}</h1> */}
-            <Button >
+            <Button id="btnSavePlaylist" onClick={handleCreatePlaylist} >
                 Save
             </Button>
 

@@ -28,20 +28,18 @@ export const getRefresh_token = async (refresh_token) => {
         .then(res => res.data );
 }
 
+export const getUserData = async () =>{
+    return axiosApiInstance.get(`${SPOTY_URL}me`)
+        .then(res=> res.data)
+}
 
-export const getTopArtist = async() =>{
+
+export const getTopItems = async() =>{
     const url = `${SPOTY_URL}me/top/artists?limit=3`
     return axiosApiInstance.get(url)
         .then(res => res.data.items)
         .catch(e => console.error('algo paso nak, e'));
 }
-
-// const getTopTracksByArtist = async(artistId) =>{
-//     const url = `${SPOTY_URL}artists/${artistId}/top-tracks?market=MX`
-//     return axiosApiInstance.get(url)
-//         .then(res => res.data.tracks)
-//         .catch(e => console.error('por qeu fallas'))
-// }
 
 export const getTopSongsbyArtist = async (artists) =>{
     return Promise.all(artists.map((artist)=>{
@@ -49,3 +47,24 @@ export const getTopSongsbyArtist = async (artists) =>{
                     .then(tracks => tracks.data)
     }))
 }
+
+
+export const fetchCreatePlaylist = async ()=>{
+    const {id} = await getUserData()
+    const body = {
+        "name": "New Playlist",
+        "description": "New playlist description",
+        "public": false
+      }
+    return axiosApiInstance.post(`${SPOTY_URL}users/${id}/playlists`, body)
+        .then(res=> res.data)
+}
+
+export const fetchUpdatePlaylist = async (playlistId, tracksId) =>{
+    // const body = {
+    //     uris: tracksId
+    // }
+    return axiosApiInstance.put(`${SPOTY_URL}playlists/${playlistId}/tracks?uris=${tracksId}`)
+        .then(res => res.data)
+}
+

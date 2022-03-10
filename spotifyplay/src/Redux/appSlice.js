@@ -27,7 +27,6 @@ export const getToken = createAsyncThunk(
           const localCredentials = JSON.parse(localStorage.getItem('credentials'));
           if (localCredentials)
             dispatch(setCredentials(localCredentials));
-          
 
       }
       window.history.replaceState({}, document.title, "/");
@@ -36,6 +35,7 @@ export const getToken = createAsyncThunk(
     }
   }
 )
+
 
 
 
