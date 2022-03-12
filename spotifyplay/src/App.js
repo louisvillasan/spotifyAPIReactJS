@@ -9,7 +9,6 @@ import Header from './component/Header.jsx';
 import Sidenavbar from './component/SideNavBar';
 import Login from './page/Login';
 import Layout from './component/Layout.jsx';
-import Callback from './page/Callback';
 
 
 import {Container, Row, Col} from 'react-bootstrap'
@@ -33,7 +32,6 @@ function App() {
                 <Routes>
                   <Route exact path='/' element={<Layout/>}  />
                   <Route exact path='/login' element={<Login/>}  />
-                  <Route exact path='/callback' element={<Callback/>}  />
                 </Routes>
               </BrowserRouter>
               This is a test
