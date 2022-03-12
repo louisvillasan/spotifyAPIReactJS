@@ -19,7 +19,7 @@ const Layout = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
-    
+
     const handleBringItems = type =>{
     console.log("🚀 ~ file: Layout.jsx ~ line 24 ~ handleBringItems ~ type", type)
         // e.preventDefault();
