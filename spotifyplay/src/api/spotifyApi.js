@@ -7,10 +7,7 @@ export const getPlaylist = async () => {
         .then(res => res.data.items)
 }
 
-export const searchItems = async () =>{
-    return axiosApiInstance.get(`${SPOTY_URL}search?q=nanpa&type=artist`)
-        .then(res => res.data.artists.items)
-}
+
 
 export const loginSpotify = async(code) =>{
     const url = `http://localhost:3001/callback?code=${code}`;
@@ -61,10 +58,13 @@ export const fetchCreatePlaylist = async ()=>{
 }
 
 export const fetchUpdatePlaylist = async (playlistId, tracksId) =>{
-    // const body = {
-    //     uris: tracksId
-    // }
     return axiosApiInstance.put(`${SPOTY_URL}playlists/${playlistId}/tracks?uris=${tracksId}`)
         .then(res => res.data)
+}
+
+
+export const searchByArtistOrTrack = async (value, type) =>{
+    return axiosApiInstance.get(`${SPOTY_URL}search?q=${value}&type=${type}`)
+    .then(res => res.data.artists.items)
 }
 

@@ -27,13 +27,13 @@ const Inpuslayout = ({seedData, handleMoreSeedData, setSeedData}) => {
 
     const  [options, setOptions] = useState(initialOptions)
 
-
+    // TODO: Get The recomendations with the inputs 
 
     const handleChangeDataPerItem = (data, idx) =>{
         let newSeedData = seedData;
         newSeedData[idx] = data;
         setSeedData(newSeedData);
-        // console.log("🚀 ~ file: InpusLayout.jsx ~ line 9 ~ handleChangeDataPerItem ~ seedData", seedData)
+        console.log("🚀 ~ file: InpusLayout.jsx ~ line 9 ~ handleChangeDataPerItem ~ seedData", seedData)
     }
 
     const handleChangueOpPerItem = (op, idx) =>{

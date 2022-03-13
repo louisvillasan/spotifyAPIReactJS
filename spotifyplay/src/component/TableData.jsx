@@ -2,7 +2,7 @@ import React from 'react';
 
 
 import { Table } from 'react-bootstrap';
-const Tabledata = ({items}) => {
+const Tabledata = ({items, handleSetArtist}) => {
 
 
     return (
@@ -11,7 +11,7 @@ const Tabledata = ({items}) => {
                 {items.map((item) =>{
                     return(
                     <tr key={item.id}>
-                        <td>{item.name}</td>
+                        <td onClick={handleSetArtist(item)} >{item.name}</td>
                     </tr>
                     );
                 })}
@@ -19,5 +19,9 @@ const Tabledata = ({items}) => {
         </Table>
     );
 }
+
+Tabledata.defaultProps = {
+    items: [{}]
+  };
 
 export default Tabledata;

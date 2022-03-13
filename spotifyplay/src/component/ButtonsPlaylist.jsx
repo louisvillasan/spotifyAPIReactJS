@@ -7,8 +7,9 @@ import Inpuslayout from './InpusLayout';
 const Buttonsplaylist = ({handleBringItems, isLoading}) => {
 
     const initialSeedData = {
-        type: 'artist',
-        value: ''
+        type: 'Artist',
+        value: '',
+        id: ''
         }
 
 
@@ -49,8 +50,6 @@ const Buttonsplaylist = ({handleBringItems, isLoading}) => {
             {show && <Inpuslayout seedData={seedData} 
                     handleMoreSeedData={handleMoreSeedData}
                     setSeedData={setSeedData}/>}
-            
-
         </>
     );
 }
