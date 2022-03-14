@@ -38,11 +38,18 @@ export const getTopItems = async() =>{
         .catch(e => console.error('algo paso nak, e'));
 }
 
-export const getTopSongsbyArtist = async (artists) =>{
-    return Promise.all(artists.map((artist)=>{
-        return axiosApiInstance.get(`${SPOTY_URL}artists/${artist.id}/top-tracks?market=MX`)
-                    .then(tracks => tracks.data)
+export const getTopSongsbyArtist = async () =>{
+    const artists = await getTopItems();
+    const songs = await Promise.all(artists.map((artist)=>{
+            return axiosApiInstance.get(`${SPOTY_URL}artists/${artist.id}/top-tracks?market=MX`)
+                .then(tracks => tracks.data)
     }))
+
+    let result = []
+    for (let i = 0; i < songs.length; i++) 
+        for (let j = 0; j < songs[i].tracks.length; j++) 
+          result.push(songs[i].tracks[j]);  
+    return result  
 }
 
 
@@ -64,7 +71,33 @@ export const fetchUpdatePlaylist = async (playlistId, tracksId) =>{
 
 
 export const searchByArtistOrTrack = async (value, type) =>{
-    return axiosApiInstance.get(`${SPOTY_URL}search?q=${value}&type=${type}`)
-    .then(res => res.data.artists.items)
+
+    return (type === 'artist') 
+        ?   axiosApiInstance.get(`${SPOTY_URL}search?q=${value}&type=${type}`)
+                .then(res => res.data.artists.items)
+        :   axiosApiInstance.get(`${SPOTY_URL}search?q=${value}&type=${type}`)
+                .then(res => res.data.tracks.items)
+}
+
+
+export const getRecommendations = async (seedData, op) => {
+
+    const seed_artists = seedData.filter((item) => {
+        return item.type ==='artist'
+    }).map((artists) => {return artists.id})
+        .join(',')
+
+    const seed_tracks = seedData.filter((item) =>{
+        return item.type ==='track'
+    }).map((track) => {return track.id})
+    .join(',')
+
+
+    const queryOp = op.map((option) => {
+        return `${option.type}=${option.value}`
+    }).join('&')
+    
+    return axiosApiInstance.get(`${SPOTY_URL}recommendations?seed_artists=${seed_artists}&seed_tracks=${seed_tracks}&${queryOp}&market=MX`)
+        .then(res => res.data);
 }
 

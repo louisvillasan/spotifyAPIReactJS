@@ -1,26 +1,21 @@
 import React,{useState} from 'react';
 import { InputGroup, DropdownButton, 
-        Dropdown, FormControl, Form } from 'react-bootstrap';
+        Dropdown, FormControl, Form, Button } from 'react-bootstrap';
 import Searchmodal from './SearchModal';
 
-const Inputseed = ({data, idx, handleChangeDataPerItem}) => {
+const Inputseed = ({data, idx, handleChangeDataPerItem, handleRemoveInputSeed}) => {
     
   
-    // FIXME: Show artist on the input after clicked on the modal
-    // TODO: Block user can text from input
-    const [type, setType] = useState('Artist');
+    const [type, setType] = useState('artist');
     const [showModal, setShowModal] = useState(false);
 
-    const handleSeed = (e) =>{
-        e.preventDefault();
-        data.value = e.target.value
-        handleChangeDataPerItem(data, idx)
-    }
+
     const handleType = (e) => {
         e.preventDefault();
-        data.type = e.target.title
-        setType(data.type);
-        handleChangeDataPerItem(data,idx);
+        const newData = {...data, type: e.target.title}
+        // data.type = e.target.title
+        setType(newData.type);
+        handleChangeDataPerItem(newData,idx);
     }
 
     const handleModal = () =>{
@@ -28,9 +23,10 @@ const Inputseed = ({data, idx, handleChangeDataPerItem}) => {
     }
 
     const handleSetArtist = seed => e =>{
-        console.log("🚀 ~ file: Inputseed.jsx ~ line 31 ~ Inputseed ~ e", e)
         e.preventDefault();
+        // document.getElementById(`inputValue${idx}`).value = seed.name
         data.value = seed.name;
+        data.id = seed.id;
         handleChangeDataPerItem( data , idx )
         handleModal();
     }
@@ -38,7 +34,7 @@ const Inputseed = ({data, idx, handleChangeDataPerItem}) => {
     return (
         <>
         <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Group className="mb-3">
                 <Form.Label>Seeds</Form.Label>
                 <InputGroup className="mb-3">
                     <DropdownButton
@@ -46,17 +42,22 @@ const Inputseed = ({data, idx, handleChangeDataPerItem}) => {
                     title={type}
                     id="input-group-dropdown-1"
                     >
-                        <Dropdown.Item  title='Artist' 
+                        <Dropdown.Item  title='artist' 
                                     onClick={handleType} > 
                                     Artist
                         </Dropdown.Item>
-                        <Dropdown.Item  title='Track' 
+                        <Dropdown.Item  title='track' 
                                     onClick={handleType} > 
                                     Track
                         </Dropdown.Item>
                     </DropdownButton>
                         
-                <FormControl  onClick={handleModal}   onChange={handleSeed} aria-label="Text input with dropdown button" />
+                <FormControl   onClick={handleModal}   aria-label="Text input with dropdown button"
+                               value={data.value} readOnly={true} />
+                 <Button  variant="outline-secondary"
+                          onClick={handleRemoveInputSeed(idx)}>
+                    Remove
+                </Button>
             </InputGroup>
             </Form.Group>
         </Form>
@@ -71,5 +72,15 @@ const Inputseed = ({data, idx, handleChangeDataPerItem}) => {
 
     );
 }
+
+Inputseed.defaultProps = {
+    data: {},
+    idx: null,
+    handleChangeDataPerItem: () => {},
+    handleRemoveInputSeed: () => {}
+
+  };
+
+
 
 export default Inputseed;

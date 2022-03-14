@@ -1,28 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getTopItems, getTopSongsbyArtist,
+import { getTopSongsbyArtist,
         fetchCreatePlaylist, fetchUpdatePlaylist} from '../api/spotifyApi'
 
 
 
 export const setThunkItems = createAsyncThunk(
   'spotify/setItems',
-  async (type, {dispatch}) =>{
+  async (args,  {dispatch}) =>{
     try{
 
+      console.log(args, 'args');
+      // console.log(seedData, 'seedData')
+      dispatch(setIsLoading())
+    //  TODO: Do it work with the endpoint specified
 
+    
+      // const items = await getTopSongsbyArtist();
+
+      // dispatch(setPlaylist(items));
       dispatch(setIsLoading())
-      const artists = await getTopItems();
-      const songs = await getTopSongsbyArtist(artists);
-      
-      let result = []
-      
-      for (let i = 0; i < songs.length; i++) 
-        for (let j = 0; j < songs[i].tracks.length; j++) 
-          result.push(songs[i].tracks[j]);  
-      
-      console.log("🚀 ~ file: spottifySlice.js ~ line 29 ~ result", result)
-      dispatch(setPlaylist(result));
-      dispatch(setIsLoading())
+ 
     }catch(e){
       dispatch(setIsLoading())
       console.error('no se hizo la peticion')

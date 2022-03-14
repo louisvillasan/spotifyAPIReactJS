@@ -14,9 +14,8 @@ const Searchmodal = ({handleModal,type, handleSetArtist }) => {
     const handleSearch = async (e) =>{
         setLoading(!loading)
         e.preventDefault();
-        // FIXME: Fix search by type
         
-        const newItems = await searchByArtistOrTrack(query, 'artist');
+        const newItems = await searchByArtistOrTrack(query, type);
         setItems(newItems)
         setLoading(!loading)
     }

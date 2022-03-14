@@ -2,8 +2,13 @@ import React, {useState} from 'react';
 import { Button, Container } from 'react-bootstrap';
 import Inputrange from './InputRange';
 import Inputseed from './Inputseed';
+import { getRecommendations } from '../api/spotifyApi';
 
-const Inpuslayout = ({seedData, handleMoreSeedData, setSeedData}) => {
+import {setThunkItems } from '../Redux/spottifySlice'
+import { useDispatch, useSelector } from 'react-redux';
+
+
+const InputLayout = ({seedData, handleMoreSeedData, setSeedData}) => {
     
     const initialOptions = [{
         type: 'max_acousticness', 
@@ -20,20 +25,28 @@ const Inpuslayout = ({seedData, handleMoreSeedData, setSeedData}) => {
     },{
         type: 'max_loudness', 
         value: 0.5
-    },{
-        type: 'max_popularity', 
-        value: 0.5
-    }]
+    }
+    // ,{
+    //     type: 'max_popularity', 
+    //     value: 0.5
+    // }
+]
 
     const  [options, setOptions] = useState(initialOptions)
+    const dispatch = useDispatch();
 
-    // TODO: Get The recomendations with the inputs 
+
 
     const handleChangeDataPerItem = (data, idx) =>{
         let newSeedData = seedData;
         newSeedData[idx] = data;
         setSeedData(newSeedData);
-        console.log("🚀 ~ file: InpusLayout.jsx ~ line 9 ~ handleChangeDataPerItem ~ seedData", seedData)
+    }
+
+    const handleRemoveInputSeed = idx => e => {
+        e.preventDefault();
+        const newSeedData = seedData.filter((seed, index) =>  index !== idx)
+        setSeedData(newSeedData);
     }
 
     const handleChangueOpPerItem = (op, idx) =>{
@@ -42,12 +55,24 @@ const Inpuslayout = ({seedData, handleMoreSeedData, setSeedData}) => {
         setOptions(newOps);
     }
 
+    const handleData = async () =>{
+        console.log('pase')
+        dispatch(setThunkItems({
+            endpoint: 'recomendation',
+            args: [seedData, options]
+        }))
+        // const items = await getRecommendations(seedData, options );
+        // console.log("🚀 ~ file: InputLayout.jsx ~ line 56 ~ handleData ~ items", items)
+        
+    }
+
 
     return (
         <div>
             {seedData.map((data, idx ) => {
                 return <Inputseed key={idx}
-                data={data} idx={idx} handleChangeDataPerItem={handleChangeDataPerItem}/>
+                data={data} idx={idx} handleChangeDataPerItem={handleChangeDataPerItem}
+                handleRemoveInputSeed={handleRemoveInputSeed}/>
             })}
             <Button  
                 onClick={handleMoreSeedData}
@@ -63,9 +88,15 @@ const Inpuslayout = ({seedData, handleMoreSeedData, setSeedData}) => {
                 })}
                 
             </Container>
+
+            <Button  
+                    onClick={handleData}
+                    className='btnResources'>
+                    Submit
+            </Button>
             
         </div>
     );
 }
 
-export default Inpuslayout;
+export default InputLayout;

@@ -21,7 +21,8 @@ const Tabledata = ({items, handleSetArtist}) => {
 }
 
 Tabledata.defaultProps = {
-    items: [{}]
+    items: [{}],
+    handleSetArtist: () => {}
   };
 
 export default Tabledata;

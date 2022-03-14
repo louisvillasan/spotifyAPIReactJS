@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 
 import { ButtonGroup, Button} from 'react-bootstrap';
-import Inpuslayout from './InpusLayout';
+import Inpuslayout from './InputLayout';
 
 
 const Buttonsplaylist = ({handleBringItems, isLoading}) => {
 
     const initialSeedData = {
-        type: 'Artist',
+        type: 'artist',
         value: '',
         id: ''
         }

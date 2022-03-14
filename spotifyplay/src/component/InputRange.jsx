@@ -5,7 +5,7 @@ const Inputrange = ({op, handleChangueOpPerItem, idx}) => {
 
     const handleOption = (e) =>{
         e.preventDefault()
-        op.value = (e.target.value/100)
+        op.value = (Math.floor(e.target.value/10))/10
         handleChangueOpPerItem(op, idx)
         console.log("🚀 ~ file: InputRange.jsx ~ line 8 ~ handleOption ~ op", op)        
     }

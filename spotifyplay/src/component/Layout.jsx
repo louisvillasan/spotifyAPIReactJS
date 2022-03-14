@@ -21,11 +21,7 @@ const Layout = () => {
 
 
     const handleBringItems = type =>{
-    console.log("🚀 ~ file: Layout.jsx ~ line 24 ~ handleBringItems ~ type", type)
-        // e.preventDefault();
-        console.log('am working');
         dispatch(setThunkItems(type));
-
     }
 
     const handleCreatePlaylist = (e) =>{
