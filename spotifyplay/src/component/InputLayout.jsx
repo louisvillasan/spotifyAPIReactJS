@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
-import { Button, Container } from 'react-bootstrap';
+import React, {useState, useEffect} from 'react';
+// Redux
+import { useDispatch } from 'react-redux';
+import {setThunkItems } from '../Redux/spottifySlice'
+// Components
 import Inputrange from './InputRange';
 import Inputseed from './Inputseed';
-import { getRecommendations } from '../api/spotifyApi';
-
-import {setThunkItems } from '../Redux/spottifySlice'
-import { useDispatch, useSelector } from 'react-redux';
+// Bootstrap
+import { Button, Container } from 'react-bootstrap';
 
 
-const InputLayout = ({seedData, handleMoreSeedData, setSeedData}) => {
+const InputLayout = ({initialState}) => {
     
     const initialOptions = [{
         type: 'max_acousticness', 
@@ -25,22 +26,29 @@ const InputLayout = ({seedData, handleMoreSeedData, setSeedData}) => {
     },{
         type: 'max_loudness', 
         value: 0.5
-    }
+    }]
     // ,{
     //     type: 'max_popularity', 
     //     value: 0.5
     // }
-]
 
-    const  [options, setOptions] = useState(initialOptions)
+    const [seedData, setSeedData] = useState(initialState)
+    const [options, setOptions] = useState(initialOptions)
     const dispatch = useDispatch();
 
-
-
+    // TODO: create a custom hook for manage the inputs dinamyclly
+    
     const handleChangeDataPerItem = (data, idx) =>{
         let newSeedData = seedData;
         newSeedData[idx] = data;
         setSeedData(newSeedData);
+    }
+
+
+    const handleMoreSeedData = () =>{
+        (seedData.length<=4) 
+            ? setSeedData([...seedData, initialState])
+            : alert('Only 5 items');
     }
 
     const handleRemoveInputSeed = idx => e => {
@@ -65,6 +73,10 @@ const InputLayout = ({seedData, handleMoreSeedData, setSeedData}) => {
         // console.log("🚀 ~ file: InputLayout.jsx ~ line 56 ~ handleData ~ items", items)
         
     }
+
+    useEffect(()=>{
+        console.log(seedData)
+    }, [seedData])
 
 
     return (
@@ -98,5 +110,11 @@ const InputLayout = ({seedData, handleMoreSeedData, setSeedData}) => {
         </div>
     );
 }
+
+
+InputLayout.defaultProps = {
+    initialState: []
+  };
+
 
 export default InputLayout;

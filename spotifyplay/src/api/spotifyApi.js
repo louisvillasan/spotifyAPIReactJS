@@ -98,6 +98,6 @@ export const getRecommendations = async (seedData, op) => {
     }).join('&')
     
     return axiosApiInstance.get(`${SPOTY_URL}recommendations?seed_artists=${seed_artists}&seed_tracks=${seed_tracks}&${queryOp}&market=MX`)
-        .then(res => res.data);
+        .then(res => res.data.tracks) 
 }
 

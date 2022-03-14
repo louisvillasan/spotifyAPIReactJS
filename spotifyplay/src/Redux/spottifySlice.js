@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getTopSongsbyArtist,
+import { getTopSongsbyArtist, getRecommendations,
         fetchCreatePlaylist, fetchUpdatePlaylist} from '../api/spotifyApi'
 
 
@@ -11,13 +11,19 @@ export const setThunkItems = createAsyncThunk(
 
       console.log(args, 'args');
       // console.log(seedData, 'seedData')
+      let items = [];
+      if (args.endpoint ===  'recomendation' ){
+          items = await getRecommendations(args.args[0], args.args[1]);
+      }else if (args.endpoint ==='topArtistTopSongs'){
+          console.log('pase');
+          items = await getTopSongsbyArtist();
+      }
       dispatch(setIsLoading())
     //  TODO: Do it work with the endpoint specified
 
     
-      // const items = await getTopSongsbyArtist();
 
-      // dispatch(setPlaylist(items));
+      dispatch(setPlaylist(items));
       dispatch(setIsLoading())
  
     }catch(e){
