@@ -3,102 +3,109 @@ import React, {useState, useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import {setThunkItems } from '../Redux/spottifySlice'
 // Components
-import Inputrange from './InputRange';
 import Inputseed from './Inputseed';
+import Inputrange from './InputRange';
+import Select from './Select';
 // Bootstrap
 import { Button, Container } from 'react-bootstrap';
 
 
 const InputLayout = ({initialState}) => {
-    
-    const initialOptions = [{
-        type: 'max_acousticness', 
-        value: 0.5
-    },{
-        type: 'max_danceability', 
-        value: 0.5
-    },{
-        type: 'max_energy', 
-        value: 0.5
-    },{
-        type: 'max_instrumentalness', 
-        value: 0.5
-    },{
-        type: 'max_loudness', 
-        value: 0.5
-    }]
+
     // ,{
     //     type: 'max_popularity', 
     //     value: 0.5
     // }
 
-    const [seedData, setSeedData] = useState(initialState)
-    const [options, setOptions] = useState(initialOptions)
+    const [inputs, setInputs] = useState(initialState.inputs)
+    const [selects, setSelects] = useState(initialState.selects);
+
+    const [options, setOptions] = useState(initialState.options)
     const dispatch = useDispatch();
 
     // TODO: create a custom hook for manage the inputs dinamyclly
-    
-    const handleChangeDataPerItem = (data, idx) =>{
-        let newSeedData = seedData;
-        newSeedData[idx] = data;
-        setSeedData(newSeedData);
+
+    const handleChangeDataPerItemGeneric = (inputType, data, idx) => {
+        
+        if (inputType === 'input') {
+            setInputs(inputs.map((input,index) => {
+                return (index===idx) ? data : input
+            }));
+        }else if (inputType === 'option'){
+            setOptions(options.map((option,index) =>{
+                return (index === idx) ? data : option
+            }))
+        }
     }
 
 
-    const handleMoreSeedData = () =>{
-        (seedData.length<=4) 
-            ? setSeedData([...seedData, initialState])
+    useEffect(()=>{
+        console.log("🚀 ~ file: InputLayout.jsx ~ line 45 ~ useEffect ~ options", options);
+    }, [options])
+
+    const handleMoreinputs = () =>{
+        (inputs.length<=4) 
+            ? setInputs([...inputs, initialState.inputs[0]])
             : alert('Only 5 items');
     }
 
-    const handleRemoveInputSeed = idx => e => {
-        e.preventDefault();
-        const newSeedData = seedData.filter((seed, index) =>  index !== idx)
-        setSeedData(newSeedData);
+    const handleRemoveInputSeed = data => {  
+        if (inputs.length > 1)
+            setInputs(inputs.filter((seed) =>  seed.id !== data.id))
     }
 
-    const handleChangueOpPerItem = (op, idx) =>{
-        let newOps = options;
-        newOps[idx] = op;
-        setOptions(newOps);
-    }
+    // const handleChangueOpPerItem = (op, idx) =>{
+    //     let newOps = options;
+    //     newOps[idx] = op;
+    //     setOptions(newOps);
+    // }
 
     const handleData = async () =>{
-        console.log('pase')
-        dispatch(setThunkItems({
-            endpoint: 'recomendation',
-            args: [seedData, options]
-        }))
-        // const items = await getRecommendations(seedData, options );
-        // console.log("🚀 ~ file: InputLayout.jsx ~ line 56 ~ handleData ~ items", items)
+        const endpoint = initialState.endpoint
+        if ('recomendation' === endpoint){
+            dispatch(setThunkItems({
+                endpoint: 'recomendation',
+                args: [inputs, options]
+            }))
+        }else if ('topArtistTopSongs' === endpoint){
+            dispatch(setThunkItems({
+                endpoint: 'topArtistTopSongs',
+                args: []
+            }))
+        }
         
     }
 
-    useEffect(()=>{
-        console.log(seedData)
-    }, [seedData])
-
+  
 
     return (
         <div>
-            {seedData.map((data, idx ) => {
+            {inputs.map((data, idx ) => {
                 return <Inputseed key={idx}
-                data={data} idx={idx} handleChangeDataPerItem={handleChangeDataPerItem}
+                data={data} idx={idx} handleChangeDataPerItem={handleChangeDataPerItemGeneric}
                 handleRemoveInputSeed={handleRemoveInputSeed}/>
             })}
-            <Button  
-                onClick={handleMoreSeedData}
+            {inputs.length>0 && 
+                <Button  
+                    onClick={()=>handleMoreinputs()}
                     className='btnResources'>
                     Add seeds 
-            </Button>
+                </Button>}
+            
             <Container>
                 {options.map( (op, idx) => {
                     return (
                         <Inputrange key={idx} op={op} idx={idx}
-                        handleChangueOpPerItem={handleChangueOpPerItem}/>
+                        handleChangueOpPerItem={handleChangeDataPerItemGeneric}/>
                     )
                 })}
                 
+            </Container>
+            <Container>
+                {selects.map(select =>{
+                    return (<Select key={select.type} 
+                                select={select}/>)
+                })}
             </Container>
 
             <Button  
@@ -112,9 +119,16 @@ const InputLayout = ({initialState}) => {
 }
 
 
-InputLayout.defaultProps = {
-    initialState: []
-  };
+// InputLayout.defaultProps = {
+//     initialState: {
+//         endpoint: '',
+//         inputs: [{
+
+//         }],
+//         options:[],
+//         selects: []
+//     }
+//   };
 
 
 export default InputLayout;

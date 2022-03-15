@@ -13,9 +13,8 @@ const Inputseed = ({data, idx, handleChangeDataPerItem, handleRemoveInputSeed}) 
     const handleType = (e) => {
         e.preventDefault();
         const newData = {...data, type: e.target.title}
-        // data.type = e.target.title
         setType(newData.type);
-        handleChangeDataPerItem(newData,idx);
+        handleChangeDataPerItem('input', newData, idx);
     }
 
     const handleModal = () =>{
@@ -24,10 +23,13 @@ const Inputseed = ({data, idx, handleChangeDataPerItem, handleRemoveInputSeed}) 
 
     const handleSetArtist = seed => e =>{
         e.preventDefault();
-        // document.getElementById(`inputValue${idx}`).value = seed.name
-        data.value = seed.name;
-        data.id = seed.id;
-        handleChangeDataPerItem( data , idx )
+        
+        // It is failing here
+        handleChangeDataPerItem( 'input', {
+            ...data,
+            value: seed.name,
+            id: seed.id
+        } , idx )
         handleModal();
     }
 
@@ -55,7 +57,7 @@ const Inputseed = ({data, idx, handleChangeDataPerItem, handleRemoveInputSeed}) 
                 <FormControl   onClick={handleModal}   aria-label="Text input with dropdown button"
                                value={data.value} readOnly={true} />
                  <Button  variant="outline-secondary"
-                          onClick={handleRemoveInputSeed(idx)}>
+                          onClick={()=>handleRemoveInputSeed(data)}>
                     Remove
                 </Button>
             </InputGroup>
