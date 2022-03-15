@@ -8,20 +8,24 @@ export const setThunkItems = createAsyncThunk(
   'spotify/setItems',
   async (args,  {dispatch}) =>{
     try{
-
-      console.log(args, 'args');
+      dispatch(setIsLoading())
       // console.log(seedData, 'seedData')
       let items = [];
       if (args.endpoint ===  'recomendation' ){
-          items = await getRecommendations(args.args[0], args.args[1]);
-      }else if (args.endpoint ==='topArtistTopSongs'){
-          console.log('pase');
-          items = await getTopSongsbyArtist();
+        
+        console.log("🚀 ~ file: spottifySlice.js ~ line 13 ~ args", args.args[0])
+        items = await getRecommendations(args.args[0], args.args[1]);
+      
+      }else if (args.endpoint ==='topArtistTopSongs'){          
+        // TODO: It will work for top songs too
+        items = await getTopSongsbyArtist();
       }
-      dispatch(setIsLoading())
-    //  TODO: Do it work with the endpoint specified
+      //  TODO: Do it work with the endpoint specified
+      
+      console.log("🚀 ~ file: spottifySlice.js ~ line 21 ~ items", items)
+      
 
-    
+      // TODO: Set an error if items is empty
 
       dispatch(setPlaylist(items));
       dispatch(setIsLoading())

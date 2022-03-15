@@ -35,13 +35,18 @@ const InputLayout = ({initialState}) => {
             setOptions(options.map((option,index) =>{
                 return (index === idx) ? data : option
             }))
+        }else if (inputType === 'select'){
+            setSelects(selects.map((select,index) =>{
+                return (index === idx) ? data : select
+            }))
         }
     }
 
 
     useEffect(()=>{
-        console.log("🚀 ~ file: InputLayout.jsx ~ line 45 ~ useEffect ~ options", options);
-    }, [options])
+        // console.log("🚀 ~ file: InputLayout.jsx ~ line 45 ~ useEffect ~ options", options);
+        console.log("🚀 ~ file: InputLayout.jsx ~ line 49 ~ InputLayout ~ selects", selects)
+    }, [selects])
 
     const handleMoreinputs = () =>{
         (inputs.length<=4) 
@@ -61,8 +66,11 @@ const InputLayout = ({initialState}) => {
     // }
 
     const handleData = async () =>{
+        
         const endpoint = initialState.endpoint
+        console.log("🚀 ~ file: InputLayout.jsx ~ line 66 ~ handleData ~ initialState", initialState)
         if ('recomendation' === endpoint){
+            console.log('pase')
             dispatch(setThunkItems({
                 endpoint: 'recomendation',
                 args: [inputs, options]
@@ -70,7 +78,7 @@ const InputLayout = ({initialState}) => {
         }else if ('topArtistTopSongs' === endpoint){
             dispatch(setThunkItems({
                 endpoint: 'topArtistTopSongs',
-                args: []
+                args: [selects]
             }))
         }
         
@@ -104,7 +112,8 @@ const InputLayout = ({initialState}) => {
             <Container>
                 {selects.map(select =>{
                     return (<Select key={select.type} 
-                                select={select}/>)
+                                select={select}
+                                handleChangeDataPerItemGeneric={handleChangeDataPerItemGeneric}/>)
                 })}
             </Container>
 

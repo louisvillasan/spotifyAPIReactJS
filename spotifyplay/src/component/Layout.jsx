@@ -4,7 +4,8 @@ import {getToken} from '../Redux/appSlice'
 import {  setThunkItems,
             createPlaylist } from '../Redux/spottifySlice';
 import { useDispatch, useSelector } from 'react-redux';
-import Tabledata from './TableData.jsx';
+
+import Tabledataaction from './TableDataAction.jsx';
 import Buttonsplaylist from './ButtonsPlaylist';
 import { Button } from 'react-bootstrap';
 
@@ -36,7 +37,7 @@ const Layout = () => {
             <Buttonsplaylist
                 isLoading={isLoading} 
                 handleBringItems={handleBringItems}/>
-            {playlist ? <Tabledata items={playlist}/>
+            {playlist ? <Tabledataaction items={playlist}/>
                    : <span>nothing to show</span>}
 
             {/* <h1>{currentToken && <span>{currentToken}</span>}</h1> */}

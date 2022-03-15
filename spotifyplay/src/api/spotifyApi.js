@@ -2,16 +2,12 @@ import axiosApiInstance from './axiosConfig.js'
 import axios from 'axios';
 // TODO: set base URL 
 const SPOTY_URL = 'https://api.spotify.com/v1/'
-export const getPlaylist = async () => {
-    return axiosApiInstance.get(`${SPOTY_URL}me/playlists`)
-        .then(res => res.data.items)
-}
+
 
 
 
 export const loginSpotify = async(code) =>{
     const url = `http://localhost:3001/callback?code=${code}`;
-    console.log('estoy logeandome')
     return axios.get(url)
         .then(res => res.data)
         .catch(e => console.error('Estoy logeando desde el server', e))
@@ -19,7 +15,6 @@ export const loginSpotify = async(code) =>{
 }
 
 export const getRefresh_token = async (refresh_token) => {
-    console.log('Refreseando el token')
     const url = `http://localhost:3001/refresh_token?refresh_token=${refresh_token}`;
     return axios.get(url)
         .then(res => res.data );
@@ -53,6 +48,24 @@ export const getTopSongsbyArtist = async () =>{
 }
 
 
+// TODO: Bring more playlist;
+export const getPlaylist = async () => {
+
+    const {display_name} = await getUserData();
+    console.log(display_name);
+    return axiosApiInstance.get(`${SPOTY_URL}me/playlists`)
+        .then(res => {
+            return res.data.items.filter(playlist=>{
+                return playlist.owner.id === display_name
+            })
+        })
+
+    
+}
+
+
+
+
 export const fetchCreatePlaylist = async ()=>{
     const {id} = await getUserData()
     const body = {
@@ -69,6 +82,11 @@ export const fetchUpdatePlaylist = async (playlistId, tracksId) =>{
         .then(res => res.data)
 }
 
+export const fetchAddTrackToPlaylist = async (playlistId, trackId) => {
+    return axiosApiInstance.post(`${SPOTY_URL}playlists/${playlistId}/tracks?uris=${trackId}`)
+        .then(res => res.data);
+}
+
 
 export const searchByArtistOrTrack = async (value, type) =>{
 
@@ -81,6 +99,8 @@ export const searchByArtistOrTrack = async (value, type) =>{
 
 
 export const getRecommendations = async (seedData, op) => {
+
+    // TODO: create new file for save this algorithm on another place
 
     const seed_artists = seedData.filter((item) => {
         return item.type ==='artist'

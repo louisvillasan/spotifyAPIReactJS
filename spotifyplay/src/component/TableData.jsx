@@ -11,7 +11,7 @@ const Tabledata = ({items, handleSetArtist}) => {
                 {items.map((item) =>{
                     return(
                     <tr key={item.id}>
-                        <td onClick={handleSetArtist(item)} >{item.name}</td>
+                        <td onClick={()=>handleSetArtist(item)} >{item.name}</td>
                     </tr>
                     );
                 })}

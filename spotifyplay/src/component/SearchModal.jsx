@@ -1,20 +1,33 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+
 import { Modal, Button, 
         FormControl, InputGroup} from 'react-bootstrap';
-import { searchByArtistOrTrack } from '../api/spotifyApi';
+
+import { searchByArtistOrTrack,
+         getPlaylist } from '../api/spotifyApi';
 import Tabledata from './TableData';
 
 
-const Searchmodal = ({handleModal,type, handleSetArtist }) => {
+const Searchmodal = ({action, handleModal,  type, handleSetArtist}) => {
 
     const [query, setQuery] = useState('');
-    const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    
+    const [items, setItems] = useState([]);
+    
+    useEffect( 
+        ()=>{
+            const fetchItems = async()=>{
+            const res = await getPlaylist()
+            console.log(res);
+            setItems(res);
+        }
+        fetchItems();
+    }, [])
+    
     const handleSearch = async (e) =>{
+        e.preventDefault();     
         setLoading(!loading)
-        e.preventDefault();
-        
         const newItems = await searchByArtistOrTrack(query, type);
         setItems(newItems)
         setLoading(!loading)
@@ -35,23 +48,27 @@ const Searchmodal = ({handleModal,type, handleSetArtist }) => {
             >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                Search by {type}
+                    Search by {type}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <InputGroup className="mb-3">
-                    <FormControl
-                    placeholder={`Search by ${type}`}
-                    aria-label="search"
-                    aria-describedby="basic-addon2"
-                    onChange={handleQuery}
-                    />                    
-                    <Button variant="outline-secondary" 
-                                        id="button-addon2" onClick={handleSearch}>
-                        {loading ? <span>Loading</span>
-                                 : <span>Search</span>}
-                    </Button>
-                </InputGroup>
+
+                {action === 'searchBy' && 
+                
+                    <InputGroup className="mb-3">
+                        <FormControl
+                        placeholder={`Search by ${type}`}
+                        aria-label="search"
+                        aria-describedby="basic-addon2"
+                        onChange={handleQuery}
+                        />                    
+                        <Button variant="outline-secondary" 
+                                            id="button-addon2" onClick={handleSearch}>
+                            {loading ? <span>Loading</span>
+                                    : <span>Search</span>}
+                        </Button>
+                    </InputGroup>
+                }
 
                 <Tabledata items={items} handleSetArtist={handleSetArtist}/>
 

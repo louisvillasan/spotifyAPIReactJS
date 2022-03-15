@@ -9,7 +9,7 @@ const Buttonsplaylist = ({handleBringItems, isLoading}) => {
     const [initialState, setInitialState] = useState();
     
     const initialSeedDataRecomendation = {
-            endpoint: 'recommendation',
+            endpoint: 'recomendation',
             inputs: [{
                 type: 'artist',
                 value: '',
@@ -48,7 +48,7 @@ const Buttonsplaylist = ({handleBringItems, isLoading}) => {
 
     const [show, setShow] = useState(false)
 
-    
+    // TODO: clear table when you select other button
     const handleInputs = (endpoint) =>{
         if ('recommendation' ===  endpoint){
             setInitialState(initialSeedDataRecomendation);
