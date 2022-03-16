@@ -127,3 +127,10 @@ export const getRecommendations = async (seedData, op) => {
         .then(res => res.data.tracks) 
 }
 
+
+
+export const getCurrentlyTrack = async()=>{
+return axiosApiInstance.get(`${SPOTY_URL}me/player/devices`)
+    .then(data => console.log(data))
+}
+// v1/me/player/currently-playing

@@ -6,7 +6,7 @@ const Tabledata = ({items, handleSetArtist}) => {
 
 
     return (
-        <Table striped bordered hover variant="dark">
+        <Table responsive bordered hover>
             <tbody>
                 {items.map((item) =>{
                     return(
