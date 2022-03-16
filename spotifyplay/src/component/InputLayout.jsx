@@ -120,7 +120,7 @@ const InputLayout = ({initialState}) => {
             <Button  
                     onClick={handleData}
                     className='btnResources'>
-                    Submit
+                    Get Tracks
             </Button>
             
         </div>

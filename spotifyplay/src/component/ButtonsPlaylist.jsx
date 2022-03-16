@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 
 import { ButtonGroup, Button} from 'react-bootstrap';
 import InputLayout from './InputLayout';
+import { useDispatch } from 'react-redux';
+import { setPlaylist } from '../Redux/spottifySlice';
 
+const Buttonsplaylist = () => {
 
-const Buttonsplaylist = ({handleBringItems, isLoading}) => {
-
+    const dispatch = useDispatch();
     const [initialState, setInitialState] = useState();
     
     const initialSeedDataRecomendation = {
@@ -48,8 +50,9 @@ const Buttonsplaylist = ({handleBringItems, isLoading}) => {
 
     const [show, setShow] = useState(false)
 
-    // TODO: clear table when you select other button
     const handleInputs = (endpoint) =>{
+        // Clear the table action when tu changue de type of request
+        dispatch(setPlaylist([]));
         if ('recommendation' ===  endpoint){
             setInitialState(initialSeedDataRecomendation);
         }else if ('topArtistTopSongs' === endpoint){
@@ -69,15 +72,15 @@ const Buttonsplaylist = ({handleBringItems, isLoading}) => {
             <ButtonGroup  size="lg" className="mb-2">
                 <Button id="btnTopArtistTopSongs" 
                     onClick={()=>handleInputs('topArtistTopSongs')} className='btnResources'>
-                    {(isLoading)  ? <span>Cargando</span>
-                                : <span>  Top Items </span>}
+                   
+                        <span>  Top Items </span>
 
                 </Button>
                 
                 <Button id="btnRecTopSongs" 
                     onClick={()=>handleInputs('recommendation')} className='btnResources'>
-                    {(isLoading)  ? <span>Cargando</span>
-                                : <span> Get Recommendations from  </span>}
+                    
+                    <span> Get Recommendations from  </span>
 
                 </Button>
 

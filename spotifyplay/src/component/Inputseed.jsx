@@ -21,10 +21,9 @@ const Inputseed = ({data, idx, handleChangeDataPerItem, handleRemoveInputSeed}) 
         setShowModal(!showModal)
     }
 
-    const handleSetArtist = seed => e =>{
-        e.preventDefault();
-        
-        // It is failing here
+    const handleSetArtist = seed  =>{
+        console.log('pase');
+        // e.preventDefault();
         handleChangeDataPerItem( 'input', {
             ...data,
             value: seed.name,
@@ -67,6 +66,7 @@ const Inputseed = ({data, idx, handleChangeDataPerItem, handleRemoveInputSeed}) 
                         handleModal={handleModal}
                         type={type}
                         handleSetArtist={handleSetArtist}
+                        action={'searchBy'}
                         />
                         }
         

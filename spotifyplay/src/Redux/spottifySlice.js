@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { getTopSongsbyArtist, getRecommendations,
-        fetchCreatePlaylist, fetchUpdatePlaylist} from '../api/spotifyApi'
+        fetchCreatePlaylist, fetchUpdatePlaylist,
+        getTopUserSongs} from '../api/spotifyApi'
 
 
 
@@ -11,18 +12,16 @@ export const setThunkItems = createAsyncThunk(
       dispatch(setIsLoading())
       // console.log(seedData, 'seedData')
       let items = [];
-      if (args.endpoint ===  'recomendation' ){
-        
-        console.log("🚀 ~ file: spottifySlice.js ~ line 13 ~ args", args.args[0])
+      if (args.endpoint ===  'recomendation' ){        
         items = await getRecommendations(args.args[0], args.args[1]);
-      
       }else if (args.endpoint ==='topArtistTopSongs'){          
-        // TODO: It will work for top songs too
-        items = await getTopSongsbyArtist();
+
+        items = (args.args[0][0].currentValue === 'artist')
+            ? await getTopSongsbyArtist()
+            : await getTopUserSongs()
       }
-      //  TODO: Do it work with the endpoint specified
       
-      console.log("🚀 ~ file: spottifySlice.js ~ line 21 ~ items", items)
+      console.log("🚀 ~ file: spottifySlice.js ~ line 21 ~ items", items);
       
 
       // TODO: Set an error if items is empty

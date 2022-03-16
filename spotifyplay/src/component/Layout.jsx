@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react';
 // import { useNavigate } from 'react-router-dom';
 import {getToken} from '../Redux/appSlice'
-import {  setThunkItems,
-            createPlaylist } from '../Redux/spottifySlice';
+import { createPlaylist } from '../Redux/spottifySlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Tabledataaction from './TableDataAction.jsx';
@@ -13,17 +12,13 @@ const Layout = () => {
 
     // const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {playlist, isLoading} = useSelector((state) => state.spotify)
+    const {playlist} = useSelector((state) => state.spotify)
     
     useEffect(()=>{
         dispatch(getToken());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
-
-    const handleBringItems = type =>{
-        dispatch(setThunkItems(type));
-    }
 
     const handleCreatePlaylist = (e) =>{
         e.preventDefault();
@@ -34,19 +29,22 @@ const Layout = () => {
     return (
         <div>
             <h1>Hola desde Layout</h1>
-            <Buttonsplaylist
-                isLoading={isLoading} 
-                handleBringItems={handleBringItems}/>
-            {playlist ? <Tabledataaction items={playlist}/>
-                   : <span>nothing to show</span>}
+            <Buttonsplaylist/>
 
-            {/* <h1>{currentToken && <span>{currentToken}</span>}</h1> */}
-            <Button id="btnSavePlaylist" onClick={handleCreatePlaylist} >
-                Save
-            </Button>
+            {(playlist.length >  0) &&
+                <>
+                    <Tabledataaction items={playlist} />
+                    <Button id="btnSavePlaylist" onClick={handleCreatePlaylist} >
+                        Save as a new playlist
+                    </Button>
+                </> 
+            }
 
         </div>
     );
 }
+
+
+
 
 export default Layout;

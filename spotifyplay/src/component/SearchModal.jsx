@@ -5,13 +5,14 @@ import { Modal, Button,
 
 import { searchByArtistOrTrack,
          getPlaylist } from '../api/spotifyApi';
-import Tabledata from './TableData';
 
+import Tabledata from './TableData';
+         
 
 const Searchmodal = ({action, handleModal,  type, handleSetArtist}) => {
 
     const [query, setQuery] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     
     const [items, setItems] = useState([]);
     
@@ -22,22 +23,28 @@ const Searchmodal = ({action, handleModal,  type, handleSetArtist}) => {
             console.log(res);
             setItems(res);
         }
-        fetchItems();
-    }, [])
+        if (action === 'showPlaylist')
+            fetchItems();
+    }, [action])
+
+
+    useEffect(()=>{
+        setLoading(!loading);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[items])
     
     const handleSearch = async (e) =>{
         e.preventDefault();     
         setLoading(!loading)
         const newItems = await searchByArtistOrTrack(query, type);
         setItems(newItems)
-        setLoading(!loading)
+        // setLoading(!loading)
     }
 
     const handleQuery = e =>{
         setQuery(e.target.value)
     }
 
-    // FIXME: Fix loading button
 
     return (
         <Modal

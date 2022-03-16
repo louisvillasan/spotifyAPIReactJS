@@ -25,8 +25,13 @@ export const getUserData = async () =>{
         .then(res=> res.data)
 }
 
+export const getTopUserSongs = async () =>{
+    return axiosApiInstance.get(`${SPOTY_URL}me/top/tracks?limit=30`)
+        .then(res => res.data.items)
+}
 
-export const getTopItems = async() =>{
+
+export const getTopUserArtist = async() =>{
     const url = `${SPOTY_URL}me/top/artists?limit=3`
     return axiosApiInstance.get(url)
         .then(res => res.data.items)
@@ -34,7 +39,7 @@ export const getTopItems = async() =>{
 }
 
 export const getTopSongsbyArtist = async () =>{
-    const artists = await getTopItems();
+    const artists = await getTopUserArtist();
     const songs = await Promise.all(artists.map((artist)=>{
             return axiosApiInstance.get(`${SPOTY_URL}artists/${artist.id}/top-tracks?market=MX`)
                 .then(tracks => tracks.data)
@@ -48,12 +53,13 @@ export const getTopSongsbyArtist = async () =>{
 }
 
 
-// TODO: Bring more playlist;
+// Use this endpoint Get Current User's Playlists
+// Set limit to 50
 export const getPlaylist = async () => {
 
     const {display_name} = await getUserData();
-    console.log(display_name);
-    return axiosApiInstance.get(`${SPOTY_URL}me/playlists`)
+    // console.log(display_name);
+    return axiosApiInstance.get(`${SPOTY_URL}me/playlists?limit=50`)
         .then(res => {
             return res.data.items.filter(playlist=>{
                 return playlist.owner.id === display_name
